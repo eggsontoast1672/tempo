@@ -21,18 +21,30 @@ Grammar:
 
 ```
 program   := statement* EOF;
-statement := expression SEMICOLON;
-           | PRINT expression? SEMICOLON;
+statement := PRINT expression SEMICOLON;
+           | expression SEMICOLON;
 
 expression := equality;
 equality   := comparison ((BANG_EQUAL | EQUAL_EQUAL) comparison)*;
-comparison := value ((GREATER | GREATER_EQUAL | LESS | LESS_EQUAL) value)*;
-value      := term ((MINUS | PLUS) term)*;
-term       := factor ((SLASH | STAR) factor)*;
-factor     := (BANG | MINUS) factor | primary;
+comparison := term ((GREATER | GREATER_EQUAL | LESS | LESS_EQUAL) term)*;
+term       := factor ((MINUS | PLUS) factor)*;
+factor     := unary ((SLASH | STAR) unary)*;
+unary      := (BANG | MINUS) unary | primary;
 primary    := TRUE
             | FALSE
             | NUMBER
             | STRING
             | PAREN_LEFT expression PAREN_RIGHT;
+```
+
+```
+=== EXPRESSION ===
+true <eof>
+^~~~ ^~~~~
+
+=== CALL STACK ===
+tp_compile_precedence(TP_PREC_EQUALITY);
+
+===  BYTECODE  ===
+TP_BYTE_TRUE
 ```
