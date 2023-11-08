@@ -68,7 +68,7 @@ const TpCompileRule tp_compile_rules[] = {
     [TP_TOKEN_GREATER_EQUAL] = {NULL,                tp_compile_binary, TP_PREC_COMPARISON},
     [TP_TOKEN_LESS]          = {NULL,                tp_compile_binary, TP_PREC_COMPARISON},
     [TP_TOKEN_LESS_EQUAL]    = {NULL,                tp_compile_binary, TP_PREC_COMPARISON},
-    [TP_TOKEN_NUMBER]        = {tp_compile_number,   NULL,              TP_PREC_NONE},
+    [TP_TOKEN_NUMBER]        = {tp_compile_number,   NULL,              TP_PREC_PRIMARY},
     [TP_TOKEN_STRING]        = {tp_compile_string,   NULL,              TP_PREC_NONE},
     [TP_TOKEN_FALSE]         = {tp_compile_literal,  NULL,              TP_PREC_NONE},
     [TP_TOKEN_PRINT]         = {NULL,                NULL,              TP_PREC_NONE},
@@ -162,7 +162,12 @@ void tp_compile_precedence(TpCompiler *compiler, TpPrecedence precedence) {
     prefix_rule(compiler);
     while (precedence <= tp_get_compile_rule(compiler->current.kind)->precedence) {
         tp_compiler_advance(compiler);
-        tp_get_compile_rule(compiler->previous.kind)->infix(compiler);
+        TpCompileFn infix_rule = tp_get_compile_rule(compiler->previous.kind)->infix;
+        if (infix_rule == NULL) {
+            tp_report_error(&compiler->previous, "Expect operator");
+            return;
+        }
+        infix_rule(compiler);
     }
 }
 

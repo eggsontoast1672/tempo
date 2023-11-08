@@ -102,3 +102,8 @@ void tp_chunk_write(TpChunk *chunk, uint8_t byte) {
     chunk->code[chunk->size] = byte;
     chunk->size += 1;
 }
+
+size_t tp_chunk_write_constant(TpChunk *chunk, TpValue value) {
+    tp_value_array_write(&chunk->constants, value);
+    return chunk->constants.size - 1;
+}

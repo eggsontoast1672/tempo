@@ -7,23 +7,6 @@
 #include "tempo/lexer.h"
 
 typedef enum {
-    TP_BYTE_ADD,
-    TP_BYTE_CONSTANT,
-    TP_BYTE_DIVIDE,
-    TP_BYTE_EQUAL,
-    TP_BYTE_FALSE,
-    TP_BYTE_GREATER,
-    TP_BYTE_LESS,
-    TP_BYTE_MULTIPLY,
-    TP_BYTE_NEGATE,
-    TP_BYTE_NOT,
-    TP_BYTE_PRINT,
-    TP_BYTE_RETURN,
-    TP_BYTE_SUBTRACT,
-    TP_BYTE_TRUE,
-} TpByte;
-
-typedef enum {
     TP_PREC_NONE,
     TP_PREC_EQUALITY,
     TP_PREC_COMPARISON,

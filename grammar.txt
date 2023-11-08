@@ -1,0 +1,16 @@
+program   := statement* EOF;
+
+statement := PRINT expression SEMICOLON;
+           | expression SEMICOLON;
+
+expression := equality;
+equality   := comparison ((BANG_EQUAL | EQUAL_EQUAL) comparison)*;
+comparison := term ((GREATER | GREATER_EQUAL | LESS | LESS_EQUAL) term)*;
+term       := factor ((MINUS | PLUS) factor)*;
+factor     := unary ((SLASH | STAR) unary)*;
+unary      := (BANG | MINUS) unary | primary;
+primary    := TRUE
+            | FALSE
+            | NUMBER
+            | STRING
+            | PAREN_LEFT expression PAREN_RIGHT;
