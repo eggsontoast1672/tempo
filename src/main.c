@@ -2,13 +2,17 @@
 #include <stdio.h>
 
 #include "tempo/chunk.h"
-#include "tempo/compiler.h"
 #include "tempo/lexer.h"
+#include "tempo/parser.h"
 
 static void test_program(const char *source) {
     TpChunk chunk = tp_chunk_init();
-    tp_compile_source(source, &chunk);
-    tp_chunk_print(stderr, &chunk);
+    TpParseResult result = tp_compile_source(source, &chunk);
+    if (result.kind == TP_PARSE_ERROR) {
+        fprintf(stderr, "[ERROR] %s\n", result.message);
+    } else {
+        tp_chunk_print(stderr, &chunk);
+    }
     tp_chunk_free(&chunk);
 }
 

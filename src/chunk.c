@@ -21,7 +21,7 @@ TpChunk tp_chunk_init(void) {
 
 void tp_chunk_print(FILE *stream, const TpChunk *chunk) {
     size_t i = 0;
-    for (; chunk->code[i] != TP_BYTE_RETURN;) {
+    for (; i < chunk->size;) {
         fprintf(stderr, "%04lu\t", i);
         switch (chunk->code[i]) {
         case TP_BYTE_ADD:
@@ -72,6 +72,10 @@ void tp_chunk_print(FILE *stream, const TpChunk *chunk) {
             fprintf(stream, "TP_BYTE_PRINT\n");
             i += 1;
             break;
+        case TP_BYTE_RETURN:
+            fprintf(stream, "TP_BYTE_RETURN\n");
+            i += 1;
+            break;
         case TP_BYTE_SUBTRACT:
             fprintf(stream, "TP_BYTE_SUBTRACT\n");
             i += 1;
@@ -86,8 +90,6 @@ void tp_chunk_print(FILE *stream, const TpChunk *chunk) {
             break;
         }
     }
-    fprintf(stderr, "%04lu\t", i);
-    fprintf(stream, "TP_BYTE_RETURN\n");
 }
 
 void tp_chunk_write(TpChunk *chunk, uint8_t byte) {
