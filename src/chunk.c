@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 
-#include "tempo/compiler.h"
 #include "tempo/value.h"
 
 void tp_chunk_free(const TpChunk *chunk) {
@@ -22,7 +21,7 @@ TpChunk tp_chunk_init(void) {
 void tp_chunk_print(FILE *stream, const TpChunk *chunk) {
     size_t i = 0;
     for (; i < chunk->size;) {
-        fprintf(stderr, "%04lu\t", i);
+        fprintf(stream, "%04lu\t", i);
         switch (chunk->code[i]) {
         case TP_BYTE_ADD:
             fprintf(stream, "TP_BYTE_ADD\n");

@@ -34,7 +34,7 @@ typedef struct {
     const char *current;
 } TpLexer;
 
-const char *tp_token_kind_to_string(const TpToken *token);
+const char *tp_token_kind_to_string(TpTokenKind kind);
 
 #define tp_lexer_done(lexer) (*lexer->current == '\0')
 #define tp_lexer_peek(lexer) (*lexer->current)

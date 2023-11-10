@@ -38,9 +38,11 @@ void tp_parser_parse_unary(TpParser *parser);
 
 bool tp_compile_source(const char *source, TpChunk *out_chunk);
 
+typedef void (*TpParseFunc)(TpParser *parser);
+
 typedef struct {
-    void (*prefix)(TpParser *parser);
-    void (*infix)(TpParser *parser);
+    TpParseFunc prefix;
+    TpParseFunc infix;
     TpPrecedence precedence;
 } TpParseRule;
 

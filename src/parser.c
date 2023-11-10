@@ -14,7 +14,7 @@ void tp_parser_advance(TpParser *parser) {
 
 void tp_parser_consume(TpParser *parser, TpTokenKind kind, const char *message) {
     if (parser->current.kind != kind) {
-        tp_parser_report_error(parser);
+        tp_parser_report_error(parser, message);
     }
     tp_parser_advance(parser);
 }
@@ -29,6 +29,7 @@ void tp_parser_emit_constant(TpParser *parser, TpValue value) {
         tp_parser_report_error(parser, "Too many constants in chunk");
         return;
     }
+    tp_parser_emit_byte(parser, TP_BYTE_CONSTANT);
     tp_parser_emit_byte(parser, index);
 }
 
@@ -42,6 +43,30 @@ bool tp_parser_match(const TpParser *parser, size_t count, ...) {
     }
     va_end(args);
     return false;
+}
+
+void tp_parser_report_error(TpParser *parser, const char *message) {
+    fprintf(stderr, "Error");
+    if (parser->current.kind == TP_TOKEN_EOF) {
+        fprintf(stderr, " at end of file");
+    } else if (parser->current.kind != TP_TOKEN_ERROR) {
+        fprintf(stderr, " at '%.*s'", (int)parser->current.length,
+                parser->current.start);
+    }
+    fprintf(stderr, ": %s\n", message);
+}
+
+void tp_parser_parse_expression(TpParser *parser, TpPrecedence precedence) {
+    TpParseFunc prefix_rule = tp_parse_rules[parser->current.kind].prefix;
+    if (prefix_rule == NULL) {
+        tp_parser_report_error(parser, "Expected expression");
+        return;
+    }
+    prefix_rule(parser);
+    while (precedence <= tp_parse_rules[parser->current.kind].precedence) {
+        // No null checking necessary here.
+        tp_parse_rules[parser->current.kind].infix(parser);
+    }
 }
 
 void tp_parser_parse_binary(TpParser *parser) {

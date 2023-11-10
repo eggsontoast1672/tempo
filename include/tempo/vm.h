@@ -14,11 +14,13 @@ typedef enum {
 typedef struct {
     const TpChunk *chunk;
     uint8_t       *ip;
-    TpValue        stack[TP_VM_STACK_SIZE];
+    TpValue       stack[TP_VM_STACK_SIZE];
     TpValue       *sp;
 } TpVm;
 
-TpVm tp_vm_init(const TpChunk *chunk);
+TpVm    tp_vm_init(const TpChunk *chunk);
+TpValue tp_vm_stack_pop(TpVm *vm);
+TpValue tp_vm_stack_push(TpVm *vm, TpValue value);
 
 TpInterpretResult tp_interpret_chunk(TpChunk *chunk);
 TpInterpretResult tp_interpret_source(const char *source);

@@ -5,15 +5,33 @@
 #include "tempo/lexer.h"
 #include "tempo/parser.h"
 
+static char *read_file_to_string(const char *path) {
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        fprintf(stderr, );
+    }
+}
+
+static void print_program_tokens(const char *source) {
+    TpLexer lexer = tp_lexer_init(source);
+    while (true) {
+        TpToken token = tp_lexer_next_token(&lexer);
+        fprintf(stderr, "%s\n", tp_token_kind_to_string(token.kind));
+        if (token.kind == TP_TOKEN_EOF) {
+            break;
+        }
+    }
+}
+
 static void test_program(const char *source) {
     TpChunk chunk = tp_chunk_init();
-    TpParseResult result = tp_compile_source(source, &chunk);
-    if (result.kind == TP_PARSE_ERROR) {
-        fprintf(stderr, "[ERROR] %s\n", result.message);
-    } else {
-        tp_chunk_print(stderr, &chunk);
-    }
+    tp_compile_source(source, &chunk);
+    tp_chunk_print(stderr, &chunk);
     tp_chunk_free(&chunk);
+}
+
+static void run_file(const char *path) {
+
 }
 
 static void run_test_programs(void) {

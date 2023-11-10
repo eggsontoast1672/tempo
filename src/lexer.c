@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char *tp_token_kind_to_string(const TpToken *token) {
-    switch (token->kind) {
+const char *tp_token_kind_to_string(TpTokenKind kind) {
+    switch (kind) {
     case TP_TOKEN_MINUS:
         return "TP_TOKEN_MINUS";
     case TP_TOKEN_PAREN_LEFT:
